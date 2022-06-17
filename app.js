@@ -16,7 +16,7 @@ function processTimeWebData() {
   });
 }
 
-app.get("/listUsers", function (req, res) {
+app.get("/getTimeStories", function (req, res) {
   processTimeWebData();
 });
 
