@@ -1,24 +1,41 @@
-var express = require("express");
-var app = express();
+const express = require("express");
+const app = express();
 
-var req = require("request");
-const fs = require("fs");
+const req = require("request");
 
 /* In this method, timedata is processes */
-function processTimeWebData() {
-  req("https://time.com", function (error, response, body) {
-    console.log("error:", error);
-    console.log("statusCode:", response && response.statusCode);
+function processTimeWebData(callback) {
+  req("https://time.com/getTimeStories", function (error, response, body) {
+    var subStrRes = body.match(
+      /\"most_popular_stories\":(.+),\"activate_countdown_clock/
+    );
 
-    var htmlString = body;
+    var finalResponse = getFinalJson(JSON.parse(subStrRes[1]));
 
-    /* I am still working on parsing the html data */
+    console.log("Final Json Object: ", finalResponse);
+
+    return callback(finalResponse);
   });
 }
 
+/**
+ * In this method processing received data from web page and returning the expected json object.
+ */
+function getFinalJson(jsonArray) {
+  var jsArray = [];
+  jsonArray.forEach((element) => {
+    jsArray.push({ title: element.title, link: element.url });
+  });
+
+  var finalJson = JSON.stringify(jsArray);
+  return finalJson;
+}
+
+app.listen(8080, () => console.log("Server Running at http://localhost:8080"));
+
 app.get("/getTimeStories", function (req, res) {
-  processTimeWebData();
+  processTimeWebData(function (output1) {
+    console.log("Output:=> ", output1);
+    res.header("Content-Type", "application/json").send(output1);
+  });
 });
-
-
-app.listen(3000, () => console.log("Server Running at http://localhost:3000"));
