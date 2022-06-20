@@ -1,16 +1,15 @@
-var express = require("express");
-var app = express();
+const express = require("express");
+const app = express();
 
-var req = require("request");
+const req = require("request");
 const fs = require("fs");
 
 /* In this method, timedata is processes */
 function processTimeWebData() {
-  req("https://time.com", function (error, response, body) {
+  req("https://time.com/getTimeStories", function (error, response, body) {
     console.log("error:", error);
     console.log("statusCode:", response && response.statusCode);
-
-    var htmlString = body;
+    console.log(h3);
 
     /* I am still working on parsing the html data */
   });
@@ -19,6 +18,5 @@ function processTimeWebData() {
 app.get("/getTimeStories", function (req, res) {
   processTimeWebData();
 });
-
 
 app.listen(3000, () => console.log("Server Running at http://localhost:3000"));
