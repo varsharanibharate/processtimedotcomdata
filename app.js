@@ -9,7 +9,7 @@ function processTimeWebData() {
   req("https://time.com/getTimeStories", function (error, response, body) {
     console.log("error:", error);
     console.log("statusCode:", response && response.statusCode);
-    console.log(h3);
+    console.log(body);
 
     /* I am still working on parsing the html data */
   });
